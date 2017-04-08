@@ -1,49 +1,53 @@
 import sys
 
-def find(n):
-  (l,m) = divmod(n, 2)
-  if m == 0:
-    min = l - 1
-    max = l
-  else:
-    max = min = l
-  return [max,min]
-
-def looparray(n, k):
-  i = 0
-  tmpl = n
-  tmpr = 0
-  a = [tmpl,tmpr]
-  a.sort()
-  
-  while i < k:
-    if len(a) > 0:
-      no = a.pop()
-      res = find(no)
-      if res[0] > 0:
-        a.append(res[0])
-      if res[1] > 0:
-        a.append(res[1])
-      a.sort()
+def solve(n,k):
+  if k == 1:
+    if n == 1:
+      return [0,0]
     else:
-      res = [0,0]
-      break
-    i = i+1
-  return res
+      (l,x) = divmod(n-1, 2)
+      if x == 0:
+        m = l
+      else:
+        m = l + 1
+      return [m,l];
+  else:
+    (n1,m1) = divmod(n-1, 2)
+    (k1,m2) = divmod(k-1, 2)
+    
+    if m1 == 0:
+        n2 = n1
+    else:
+        n2 = n1 + 1
+    if m2 == 0:
+      k2 = k1
+    else:
+      k2 = k1 + 1
+    if(n1 == n2):
+      print [n1,k2]
+      return solve(n1,k2)
+    else:
+      if k1 == k2:
+        print [n1,k1]
+        return solve(n1,k1)
+      else:
+        print [n2,k2]
+        return solve(n2,k2)
 
-name = "C-small-2-attempt0"
+name = "C-large"
 path = ""
 
 f = open(name + ".in", 'r')
 o = open(name + ".out", 'w')
 
-T = int(f.readline().strip())
+T = long(f.readline().strip())
 
 for t in xrange(T):
     line = f.readline().strip().split(' ')
     print line
-    (n,k) = map(int, line)
-    res = looparray(n, k)
+    (n,k) = map(long, line)
+    res = solve(n, k)
+    
     s = "Case #%d: %d %d\n" % (t+1, res[0] , res[1])
     print s
     o.write(s)
